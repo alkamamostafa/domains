@@ -50,7 +50,12 @@ public class CSVUtility {
             String cleanCity = StringUtils.trimAllWhitespace(city).toLowerCase().replace(" ", ""); // Remove spaces and convert to lowercase
             for (String job : jobs) {
                 String cleanJob = StringUtils.trimAllWhitespace(job).toLowerCase().replace(" ", ""); // Remove spaces and convert to lowercase
-                mergedList.add(cleanCity + cleanJob + ".com");
+                if (cleanJob.matches("visit|discover")){
+                    mergedList.add(cleanJob + cleanCity + ".com");}
+                else {
+                    mergedList.add(cleanCity + cleanJob + ".com");
+                }
+
             }
         }
         return mergedList;

@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
 import java.net.Socket;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -24,25 +27,35 @@ public class WhoisController {
     public String checkDomains() {
         String inputCsvPath = "output_1.csv";
         String outputCsvPath = "output_domains.csv";
+        String expiringSoonCsvPath = "expiring_soon_domains.csv";
 
         try {
             List<String[]> domains = readDomainsFromCsv(inputCsvPath);
             List<String[]> results = new ArrayList<>();
+            List<String[]> expiringSoonResults = new ArrayList<>();
+
+            LocalDate currentDate = LocalDate.now();
+            LocalDate thresholdDate = currentDate.plusDays(30);
 
             for (String[] domainEntry : domains) {
                 String domain = domainEntry[0];
                 String whoisResponse = queryWhoisServer(domain);
 
-                String expiryDate = extractExpiryDate(whoisResponse);
-                if (expiryDate != null) {
-                    results.add(new String[]{domain, "Active", expiryDate});
+                String expiryDateStr = extractExpiryDate(whoisResponse);
+                if (expiryDateStr != null) {
+                    ZonedDateTime expiryDate = ZonedDateTime.parse(expiryDateStr);
+                    if (expiryDate.toLocalDate().isBefore(thresholdDate)) {
+                        expiringSoonResults.add(new String[]{domain, "Active", expiryDateStr});
+                    }
+                    results.add(new String[]{domain, "Active", expiryDateStr});
                 } else {
                     results.add(new String[]{domain, "Expired", "N/A"});
                 }
             }
 
             writeResultsToCsv(outputCsvPath, results);
-            return "Domain check completed. Results saved to " + outputCsvPath;
+            writeResultsToCsv(expiringSoonCsvPath, expiringSoonResults);
+            return "Domain check completed. Results saved to " + outputCsvPath + " and " + expiringSoonCsvPath;
         } catch (IOException e) {
             e.printStackTrace();
             return "An error occurred: " + e.getMessage();

@@ -3,6 +3,7 @@ package com.divit.springboot.application.controller;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,11 +26,12 @@ public class WhoisController {
 
     @GetMapping("/check-domains")
     public String checkDomains() {
-        String inputCsvPath = "output_1.csv";
+        String inputCsvPath = "keywords.csv";
         String outputCsvPath = "output_domains.csv";
         String expiringSoonCsvPath = "expiring_soon_domains.csv";
 
         try {
+
             List<String[]> domains = readDomainsFromCsv(inputCsvPath);
             List<String[]> results = new ArrayList<>();
             List<String[]> expiringSoonResults = new ArrayList<>();
@@ -38,7 +40,8 @@ public class WhoisController {
             LocalDate thresholdDate = currentDate.plusDays(30);
 
             for (String[] domainEntry : domains) {
-                String domain = domainEntry[0];
+                String domain = domainEntry[0]+".com";
+                System.out.println("domain --------" + domain);
                 String whoisResponse = queryWhoisServer(domain);
 
                 String expiryDateStr = extractExpiryDate(whoisResponse);
@@ -47,9 +50,9 @@ public class WhoisController {
                     if (expiryDate.toLocalDate().isBefore(thresholdDate)) {
                         expiringSoonResults.add(new String[]{domain, "Active", expiryDateStr});
                     }
-                    results.add(new String[]{domain, "Active", expiryDateStr});
+                  //  results.add(new String[]{domain,expiryDateStr});
                 } else {
-                    results.add(new String[]{domain, "Expired", "N/A"});
+                    results.add(new String[]{domain});
                 }
             }
 
@@ -63,7 +66,8 @@ public class WhoisController {
     }
 
     private List<String[]> readDomainsFromCsv(String filePath) throws IOException {
-        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+        File file = ResourceUtils.getFile("classpath:" + filePath);
+        try (CSVReader reader = new CSVReader(new FileReader(file))) {
             return reader.readAll();
         } catch (CsvException e) {
             throw new RuntimeException(e);

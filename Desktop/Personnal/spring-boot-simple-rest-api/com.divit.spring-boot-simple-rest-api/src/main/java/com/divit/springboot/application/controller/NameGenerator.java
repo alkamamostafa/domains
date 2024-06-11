@@ -30,7 +30,7 @@ public class NameGenerator {
         for (String baseName : baseNames) {
             for (int i = 0; i < numberOfCharacters; i++) {
                 char prefix1 = (char) ('a' + i);
-                    String newName =  prefix1  + baseName+".com";
+                    String newName =    baseName+"s.com";
                     names.add(newName);
 
             }
@@ -64,7 +64,7 @@ public class NameGenerator {
 
     public static void main(String[] args) throws IOException {
         String csvFile = "keywords.csv"; // Specify your CSV file path here
-        int numberOfCharacters = 26; // Number of characters in the alphabet
+        int numberOfCharacters = 1; // Number of characters in the alphabet
 
         List<String> baseNames = readBaseNamesFromCSV(csvFile);
         List<String> generatedNames = generateNames(baseNames, numberOfCharacters);

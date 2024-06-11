@@ -6,16 +6,24 @@ import java.util.List;
 public class DomainNameGenerator {
 
     private static final String[] PREFIXES = {
-        "get", "go", "my", "try", "best", "pro", "new", "super"
+        "get", "go", "my", "try", "best", "pro", "new", "super", "high", "ultra",
+        "mega", "micro", "hyper", "max", "prime","hotel" , "apartment" , "city" , "life", "gold"
     };
 
     private static final String[] WORDS = {
-        "tech", "web", "app", "cloud", "data", "smart", "fast", "secure"
+        "tech", "web", "app", "cloud", "data", "smart", "fast", "secure", "code",
+        "future", "digital", "global", "dynamic", "innova", "tech", "net", "cyber",
+        "power", "core", "system", "enterprise", "connect", "link", "wave", "stream",
+        "matrix" ,"top" ,"buy" , "sell" , "book"  ,
     };
 
     private static final String[] SUFFIXES = {
-        "hub", "base", "space", "zone", "world", "net", "solutions", "works"
+        "hub", "base", "space", "zone", "world", "net", "solutions", "work",
+        "lab", "place", "center", "link", "core", "point", "studio", "line",
+        "network", "tech", "way", "path", "group", "media", "market", "domain",
+        "express", "force", "focus", "sphere", "spot", "portal", "forge", "yard"
     };
+
 
     private static final String[] TLDs = {
         ".com"

@@ -24,11 +24,11 @@ public class WhoisController {
     private static final int WHOIS_PORT = 43;
     private static final Pattern EXPIRY_DATE_PATTERN = Pattern.compile("Registry Expiry Date: (\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z)");
 
-    @GetMapping("/check-domains")
+    @GetMapping("/check-domains2")
     public String checkDomains() {
-        String inputCsvPath = "keywords.csv";
-        String outputCsvPath = "output_domains.csv";
-        String expiringSoonCsvPath = "expiring_soon_domains.csv";
+        String inputCsvPath = "keywords2.csv";
+        String outputCsvPath = "output_domains2.csv";
+        String expiringSoonCsvPath = "expiring_soon_domains2.csv";
 
         try {
 
